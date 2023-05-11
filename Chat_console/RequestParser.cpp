@@ -5,6 +5,16 @@ RequestParser::RequestParser(std::string request)
 	this->request = request;
 }
 
+int RequestParser::get_code()
+{
+	std::string str_code = entities.at(0);
+	entities.pop_back();
+
+	int code = atoi(str_code.c_str());
+
+	return code;
+}
+
 void RequestParser::print_parsed()
 {
 	int size = entities.size();
@@ -14,7 +24,7 @@ void RequestParser::print_parsed()
 	}
 }
 
-void RequestParser::parse()
+RequestParser::Request RequestParser::parse()
 {
 	int request_len = this->request.length();
 	std::string buf;
@@ -32,4 +42,12 @@ void RequestParser::parse()
 		}
 	}
 	entities.push_back(buf);
+
+	Request request
+	{
+		get_code(),
+		entities
+	};
+
+	return request;
 }
