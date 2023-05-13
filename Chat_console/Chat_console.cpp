@@ -11,8 +11,11 @@
 
 int main()
 {
-	RequestParser parser("10/mojo/123");
-	RequestParser::Request req =  parser.parse();
+	//RequestParser parser("10/mojo/123");
+	//RequestParser::Request req =  parser.parse();
+	//std::cout << req.entities.at(0);
+
+	Server server;
 
 }
 
