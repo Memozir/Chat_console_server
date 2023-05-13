@@ -140,10 +140,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chat_console.cpp" />
+    <ClCompile Include="DataFileControl.cpp" />
+    <ClCompile Include="Protocol.cpp" />
     <ClCompile Include="RequestParser.cpp" />
+    <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataFileControl.h" />
+    <ClInclude Include="Protocol.h" />
     <ClInclude Include="RequestParser.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Server.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="test_pm.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Chat_console.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,9 @@
+<Nick1>
+<? Message1 ?>
+<? Message2 ?>
+<? Message3 ?>
+<Nick2>
+<? Message1 ?>
+<? Message2 ?>
+<Nick3>
+<? Message1 ?>

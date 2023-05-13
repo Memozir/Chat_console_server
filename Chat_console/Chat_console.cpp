@@ -2,13 +2,20 @@
 //
 
 #include <iostream>
+#include <fstream>
+#include <conio.h>
+#include <locale.h>
 
 #include "RequestParser.h"
+#include "Server.h"
 
 int main()
 {
-    RequestParser parser("test1/test2/test3");
-    parser.parse();
-    parser.print_parsed();
+	//RequestParser parser("10/mojo/123");
+	//RequestParser::Request req =  parser.parse();
+	//std::cout << req.entities.at(0);
+
+	Server server;
+
 }
 

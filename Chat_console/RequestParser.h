@@ -6,13 +6,9 @@ class RequestParser
 {
 private:
 	std::string request;
-	
-	//struct Request {
-	//	int entity_count;
-	//	std::string* entities;
-	//};
-
 	std::vector<std::string> entities;
+
+	int get_code();
 
 	//Request* request_entity;
 
@@ -20,7 +16,12 @@ public:
 	RequestParser(std::string request);
 	//~RequestParser();
 
-	void parse();
+	struct Request {
+		int code;
+		std::vector<std::string>& entities;
+	};
+
+	Request parse();
 	void print_parsed();
 };
 
