@@ -13,7 +13,7 @@ private:
 	{
 		REGISTRATION,
 		AUTH,
-		USERS_LIST,
+		USER_LIST,
 		MESSAGE_LIST
 	};	
 };

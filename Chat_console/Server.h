@@ -13,16 +13,21 @@ class Server
 public:
 
 	Server();
-	~Server();
+	//~Server();
 
 	void init();
-	void socket_init();
-	void close();
+	void socket_init(int& argc, char** argv);
+	void close_listen();
+	void send_response(std::string request);
+	void recv_request();
+	void shutdown_connection();
+	void clean();
 
 private:
 	WSADATA ws;
-	SOCKET sock;
-	addrinfo addr;
+	SOCKET sock_listen;
+	SOCKET sock_client;
+	addrinfo addr, *result;
 	
 	std::map<std::string, bool> auth;
 	std::map<std::string, bool>::iterator auth_it = auth.begin();

@@ -5,17 +5,26 @@
 #include <fstream>
 #include <conio.h>
 #include <locale.h>
+#include "sqlite3.h"
 
 #include "RequestParser.h"
 #include "Server.h"
+#include "Db.h"
 
-int main()
+int __cdecl main(int& argc, char** argv)
 {
 	//RequestParser parser("10/mojo/123");
 	//RequestParser::Request req =  parser.parse();
 	//std::cout << req.entities.at(0);
 
-	Server server;
+	Db* db = new Db();
+
+	//Server server;
+	//server.init();
+	//server.socket_init(argc, argv);
+	//server.recv_request();
+	//server.shutdown_connection();
+	//server.clean();
 
 }
 

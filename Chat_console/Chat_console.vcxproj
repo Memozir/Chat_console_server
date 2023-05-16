@@ -141,16 +141,22 @@
   <ItemGroup>
     <ClCompile Include="Chat_console.cpp" />
     <ClCompile Include="DataFileControl.cpp" />
+    <ClCompile Include="Db.cpp" />
     <ClCompile Include="Protocol.cpp" />
     <ClCompile Include="RequestParser.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="shell.c" />
+    <ClCompile Include="sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataFileControl.h" />
+    <ClInclude Include="Db.h" />
     <ClInclude Include="Protocol.h" />
     <ClInclude Include="RequestParser.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="sqlite3ext.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="test_pm.txt" />
