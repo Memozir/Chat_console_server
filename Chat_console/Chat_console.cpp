@@ -18,7 +18,15 @@ int __cdecl main(int& argc, char** argv)
 	//std::cout << req.entities.at(0);
 
 	Db* db = new Db();
+	//db->registrate("Yura", "12345");
+	//db->registrate("Alex", "54321");
+	std::vector<std::string> users;
+	users.push_back("Alex");
+	db->add_message("Yura", users, "Everybody HI!");
 
+	//std::cout << "AUTH: " << db->auth("Alex", "54321") << std::endl;
+
+	delete db;
 	//Server server;
 	//server.init();
 	//server.socket_init(argc, argv);

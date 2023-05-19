@@ -145,7 +145,6 @@
     <ClCompile Include="Protocol.cpp" />
     <ClCompile Include="RequestParser.cpp" />
     <ClCompile Include="Server.cpp" />
-    <ClCompile Include="shell.c" />
     <ClCompile Include="sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +155,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="sqlite3.h" />
-    <ClInclude Include="sqlite3ext.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="test_pm.txt" />
