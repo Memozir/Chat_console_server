@@ -21,7 +21,7 @@ public:
 		std::vector<std::string>& entities;
 	};
 
-	Request parse();
+	Request* parse();
 	void print_parsed();
 };
 

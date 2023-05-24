@@ -29,6 +29,5 @@ private:
 	SOCKET sock_client;
 	addrinfo addr, *result;
 	
-	std::map<std::string, bool> auth;
-	std::map<std::string, bool>::iterator auth_it = auth.begin();
+	std::vector<std::string>* users_online = new std::vector<std::string>;
 };

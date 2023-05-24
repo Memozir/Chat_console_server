@@ -55,8 +55,10 @@ int Db::is_exist(std::string username)
 	return id;
 }
 
-bool Db::auth(std::string username, std::string pass)
+std::vector<std::string>* Db::auth(std::string username, std::string pass)
 {
+	std::vector<std::string>* result = new std::vector<std::string>;
+
 	sqlite3_stmt* stmt;
 	std::string query = "SELECT user_id FROM User WHERE username='" + username + "' AND password='" + pass + "';";
 	std::cout << query << std::endl;
@@ -69,18 +71,22 @@ bool Db::auth(std::string username, std::string pass)
 
 	if (check == 0)
 	{
-		return false;
+		return result;
 	}
 
-	return true;
+	result->push_back("1");
+
+	return result;
 }
 
-void Db::registrate(std::string username, std::string pass)
+std::vector<std::string>* Db::registrate(std::string username, std::string pass)
 {
+	std::vector<std::string>* result = new std::vector<std::string>;
+
 	if (is_exist(username) > 0)
 	{
 		std::cout << "ALREADY EXISTS\n";
-		return;
+		return result;
 	}
 
 	std::cout << "NOT EXIST\n";
@@ -93,8 +99,11 @@ void Db::registrate(std::string username, std::string pass)
 	{
 		fprintf(stderr, "Error SQL: %sn", err);
 		sqlite3_free(err);
+		return result;
 	}
 
+	result->push_back("1");
+	return result;
 }
 
 int Db::get_id(std::string username)
@@ -114,8 +123,10 @@ int Db::get_id(std::string username)
 	return sqlite3_column_int(stmt, 0);
 }
 
-void Db::add_message(std::string username, std::vector<std::string> users, std::string msg_text)
+std::vector<std::string>* Db::add_message(std::string username, std::vector<std::string> users, std::string msg_text)
 {
+	std::vector<std::string>* result = new std::vector<std::string>;
+
 	char* err;
 	int id = get_id(username);
 
@@ -123,7 +134,7 @@ void Db::add_message(std::string username, std::vector<std::string> users, std::
 
 	if (id == -1)
 	{
-		return;
+		return result;
 	}
 
 	for (int i = 0; i < users.size(); i++)
@@ -145,30 +156,35 @@ void Db::add_message(std::string username, std::vector<std::string> users, std::
 		{
 			fprintf(stderr, "Error SQL: %sn", err);
 			sqlite3_free(err);
+			return result;
 		}
 
 	}
 	users.clear();
+
+	result->push_back("1");
+
+	return result;
 }
 
-std::vector<const unsigned char*>& Db::get_messages_from_user(std::string username, std::string user_from)
+std::vector<std::string>* Db::get_messages_from_user(std::string username, std::string user_from)
 {
-	std::vector<const unsigned char*>* messages = new std::vector<const unsigned char*>;
+	std::vector<std::string>* messages = new std::vector<std::string>;
 
 	int user_id = is_exist(username);
 
-	if (user_id > 0)
+	if (user_id == 0)
 	{
-		std::cout << "ALREADY EXISTS\n";
-		return *messages;
+		std::cout << "USER DOES NOT EXISTS\n";
+		return messages;
 	}
 
 	int user_from_id = is_exist(user_from);
 
 	if (user_from_id > 0)
 	{
-		std::cout << "ALREADY EXISTS\n";
-		return *messages;
+		std::cout << "USER FROM ALREADY EXISTS\n";
+		return messages;
 	}
 
 	sqlite3_stmt* stmt;
@@ -179,8 +195,9 @@ std::vector<const unsigned char*>& Db::get_messages_from_user(std::string userna
 	while (sqlite3_step(stmt) != SQLITE_DONE)
 	{
 		const unsigned char* msg = sqlite3_column_text(stmt, 0);
-		messages->push_back(msg);
+		std::string result = std::string(reinterpret_cast<const char*>(msg));
+		messages->push_back(result);
 	}
 	
-	return *messages;
+	return messages;
 }

@@ -24,7 +24,7 @@ void RequestParser::print_parsed()
 	}
 }
 
-RequestParser::Request RequestParser::parse()
+RequestParser::Request* RequestParser::parse()
 {
 	int request_len = this->request.length();
 	std::string buf;
@@ -43,8 +43,7 @@ RequestParser::Request RequestParser::parse()
 	}
 	entities.push_back(buf);
 
-	Request request
-	{
+	Request* request = new Request{
 		get_code(),
 		entities
 	};

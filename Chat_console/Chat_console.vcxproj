@@ -140,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chat_console.cpp" />
-    <ClCompile Include="DataFileControl.cpp" />
     <ClCompile Include="Db.cpp" />
     <ClCompile Include="Protocol.cpp" />
     <ClCompile Include="RequestParser.cpp" />
@@ -148,7 +147,6 @@
     <ClCompile Include="sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataFileControl.h" />
     <ClInclude Include="Db.h" />
     <ClInclude Include="Protocol.h" />
     <ClInclude Include="RequestParser.h" />
