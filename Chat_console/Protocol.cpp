@@ -60,13 +60,14 @@ std::vector<std::string>* Protocol::get_user_msg(std::vector<std::string> entiti
 	Db db;
 	return db.get_messages_from_user(entities.at(0), entities.at(1));
 }
-//std::vector<std::string>* Protocol::message_count(std::vector<std::string> entities)
-//{
-//	Db db;
-//	return db.message_count(entities.at(0));
-//}
 
-std::string Protocol::response()
+std::vector<std::string>* Protocol::message_count(std::vector<std::string> entities)
+{
+	Db db;
+	return db.message_count(entities.at(0));
+}
+
+std::string Protocol::response(std::vector<std::string> users)
 {
 	std::vector<std::string>* result;
 
@@ -78,12 +79,12 @@ std::string Protocol::response()
 	case Operations::AUTH:
 		result = auth(request->entities);
 		break;
-	//case Operations::MESSAGE_LIST:
-	//	result = message_count(request->entities);
-	//	break;
-	//case Operations::USER_LIST:
-	//	result = user_list(request->entities);
-	//	break;
+	case Operations::MESSAGE_LIST:
+		result = message_count(request->entities);
+		break;
+	case Operations::USER_LIST:
+		result = &users;
+		break;
 	case Operations::USER_MESSAGE:
 		result = get_user_msg(request->entities);
 		break;

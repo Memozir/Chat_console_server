@@ -4,7 +4,8 @@
 #include <WS2tcpip.h>
 #include <iostream>
 #include <vector>
-#include <map>
+
+#include "Protocol.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -22,6 +23,7 @@ public:
 	void recv_request();
 	void shutdown_connection();
 	void clean();
+	void set_online(std::string username);
 
 private:
 	WSADATA ws;

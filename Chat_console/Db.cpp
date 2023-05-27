@@ -188,7 +188,7 @@ std::vector<std::string>* Db::get_messages_from_user(std::string username, std::
 	}
 
 	sqlite3_stmt* stmt;
-	std::string query = "SELECT msg_text from Messages WHERE to_id = " + std::to_string(user_id) + " AND from_id = " + std::to_string(user_from_id) + ";";
+	std::string query = "SELECT msg_text FROM Messages WHERE to_id = " + std::to_string(user_id) + " AND from_id = " + std::to_string(user_from_id) + ";";
 
 	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, 0);
 
@@ -200,4 +200,31 @@ std::vector<std::string>* Db::get_messages_from_user(std::string username, std::
 	}
 	
 	return messages;
+}
+
+std::vector<std::string>* Db::message_count(std::string username)
+{
+	std::vector<std::string>* result = new std::vector<std::string>;
+
+	int user_id = is_exist(username);
+
+	if (user_id == 0)
+	{
+		std::cout << "USER DOES NOT EXISTS\n";
+		return result;
+	}
+
+	sqlite3_stmt* stmt;
+	std::string sql = "SELECT t2.username, count(*) as mes_count FROM Messages as t1 inner join Users as t2 on t1.from_id = t2.user_id WHERE to_id = '" + std::to_string(user_id) + "' GROUP BY from_id;";
+	sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
+
+	while (sqlite3_step(stmt) != SQLITE_DONE)
+	{
+		const unsigned char* msg = sqlite3_column_text(stmt, 0);
+		int count = sqlite3_column_int(stmt, 1);
+		std::string res = std::string(reinterpret_cast<const char*>(msg)) + ": " + std::to_string(count);
+		result->push_back(res);
+	}
+
+	return result;
 }

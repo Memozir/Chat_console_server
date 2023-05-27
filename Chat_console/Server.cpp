@@ -106,15 +106,18 @@ void Server::recv_request()
 	
 	do
 	{
-		std::string responce;
+		std::string request;
 		std::cout << "Listenning...\n";
-		res = recv(sock_client, &responce[0], 512, 0);
+		res = recv(sock_client, &request[0], 512, 0);
 
 		if (res > 0)
 		{
-			send_response(responce);
+			Protocol prot(request);
+			std::string response = prot.response(*users_online);
+
+			send_response(response);
 			std::cout << "Recieved: " << res << " bytes" << std::endl;
-			std::cout << "REQUEST: " << responce.c_str() << std::endl;
+			std::cout << "REQUEST: " << response.c_str() << std::endl;
 		}
 		else if (res == 0)
 			printf("Connection closing...\n");
@@ -143,4 +146,9 @@ void Server::clean()
 {
 	closesocket(sock_client);
 	WSACleanup();
+}
+
+void Server::set_online(std::string username)
+{
+	users_online->push_back(username);
 }
