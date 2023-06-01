@@ -31,5 +31,5 @@ private:
 	SOCKET sock_client;
 	addrinfo addr, *result;
 	
-	std::vector<std::string>* users_online = new std::vector<std::string>;
+	std::vector<std::string> users_online;
 };

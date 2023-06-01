@@ -69,7 +69,7 @@ std::vector<std::string>* Protocol::message_count(std::vector<std::string> entit
 
 std::string Protocol::response(std::vector<std::string> users)
 {
-	std::vector<std::string>* result;
+	std::vector<std::string>* result = new std::vector<std::string>;
 
 	switch ((Operations)request->code)
 	{

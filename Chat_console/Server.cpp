@@ -102,19 +102,20 @@ void Server::send_response(std::string request)
 
 void Server::recv_request()
 {
-	int res = 0;
-	
+	int res = 8;
+	std::string test = "0/t1/132";
+
 	do
 	{
 		std::string request;
 		std::cout << "Listenning...\n";
-		res = recv(sock_client, &request[0], 512, 0);
+		//res = recv(sock_client, &request[0], 512, 0);
 
 		if (res > 0)
 		{
-			Protocol prot(request);
-			std::string response = prot.response(*users_online);
-
+			Protocol prot(test);
+			std::string response = prot.response(users_online);
+			std::cout << response.c_str();
 			send_response(response);
 			std::cout << "Recieved: " << res << " bytes" << std::endl;
 			std::cout << "REQUEST: " << response.c_str() << std::endl;
@@ -150,5 +151,5 @@ void Server::clean()
 
 void Server::set_online(std::string username)
 {
-	users_online->push_back(username);
+	users_online.push_back(username);
 }
