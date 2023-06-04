@@ -89,7 +89,7 @@ void Server::socket_init(int& argc, char** argv)
 void Server::send_response(std::string request)
 {
 	int res = 0;
-	//std::cout << "SEND RESPONSE: " << strlen(request.c_str()) << std::endl;
+	std::cout << "\n---SEND RESPONSE---\n" << request.c_str() << "\n---SEND RESPONSE---\n";
 	int send_res = send(sock_client, request.c_str(), strlen(request.c_str()), 0);
 	if (send_res == SOCKET_ERROR) {
 		std::cout << "Send failed: " << WSAGetLastError() << std::endl;
@@ -102,20 +102,20 @@ void Server::send_response(std::string request)
 
 void Server::recv_request()
 {
-	int res = 8;
-	std::string test = "0/t1/132";
+	int res;
+	//std::string test = "0/t1/132";
 
 	do
 	{
 		std::string request;
 		std::cout << "Listenning...\n";
-		//res = recv(sock_client, &request[0], 512, 0);
+		res = recv(sock_client, &request[0], 512, 0);
 
 		if (res > 0)
 		{
-			Protocol prot(test);
+			Protocol prot(request);
 			std::string response = prot.response(users_online);
-			std::cout << response.c_str();
+			std::cout << "\n---SEND_RESP---\n" << response << "\n---SEND_RESP---\n";
 			send_response(response);
 			std::cout << "Recieved: " << res << " bytes" << std::endl;
 			std::cout << "REQUEST: " << response.c_str() << std::endl;

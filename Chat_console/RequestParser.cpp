@@ -1,14 +1,33 @@
 #include "RequestParser.h"
 
+int get_str_size(std::string str)
+{
+	int i = 0;
+	const char* buf = str.c_str();
+
+	while (buf[i] != '\0' && (int)buf[i] >= 0)
+	{
+		i++;
+	}
+
+	return i;
+}
+
 RequestParser::RequestParser(std::string request)
 {
-	this->request = request;
+	std::cout << request.c_str();
+	size = get_str_size(request);
+	//this->request.copy(&request[0], size);
+	for (int i = 0; i < size; i++)
+	{
+		this->request.push_back(request.c_str()[i]);
+	}
 }
 
 int RequestParser::get_code()
 {
 	std::string str_code = entities.at(0);
-	entities.pop_back();
+	entities.erase(entities.begin());
 
 	int code = atoi(str_code.c_str());
 
@@ -24,12 +43,14 @@ void RequestParser::print_parsed()
 	}
 }
 
-RequestParser::Request* RequestParser::parse()
+RequestParser::Request RequestParser::parse()
 {
-	int request_len = this->request.length();
+
+	//int request_len = this->request.size();
+	//int request_len = get_str_size(this->request);
 	std::string buf;
 
-	for (int i = 0; i < request_len; i++)
+	for (int i = 0; i < size; i++)
 	{
 		if (request[i] != '/')
 		{
@@ -42,9 +63,9 @@ RequestParser::Request* RequestParser::parse()
 		}
 	}
 	entities.push_back(buf);
-
-	Request* request = new Request{
-		get_code(),
+	int code = get_code();
+	Request request = {
+		code,
 		entities
 	};
 

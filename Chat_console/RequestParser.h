@@ -16,12 +16,14 @@ public:
 	RequestParser(std::string request);
 	//~RequestParser();
 
+	int size = 0;
+
 	struct Request {
 		int code;
-		std::vector<std::string>& entities;
+		std::vector<std::string> entities;
 	};
 
-	Request* parse();
+	Request parse();
 	void print_parsed();
 };
 

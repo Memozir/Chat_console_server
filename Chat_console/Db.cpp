@@ -43,6 +43,9 @@ Db::~Db()
 
 int Db::is_exist(std::string username)
 {
+	//if (sqlite3_open("project_db.dblite", &db))
+	//	fprintf(stderr, "Error openning/creating DB: %s\n", sqlite3_errmsg(db));
+
 	sqlite3_stmt* stmt;
 
 	std::string check_query = "SELECT user_id FROM User WHERE username = '" + username + "';";
@@ -51,13 +54,18 @@ int Db::is_exist(std::string username)
 	sqlite3_step(stmt);
 
 	int id = sqlite3_column_int(stmt, 0);
+	sqlite3_finalize(stmt);
+	//sqlite3_close(db);
 
 	return id;
 }
 
-std::vector<std::string>* Db::auth(std::string username, std::string pass)
+std::vector<std::string> Db::auth(std::string username, std::string pass)
 {
-	std::vector<std::string>* result = new std::vector<std::string>;
+	//if (sqlite3_open("project_db.dblite", &db))
+	//	fprintf(stderr, "Error openning/creating DB: %s\n", sqlite3_errmsg(db));
+
+	std::vector<std::string> result;
 
 	sqlite3_stmt* stmt;
 	std::string query = "SELECT user_id FROM User WHERE username='" + username + "' AND password='" + pass + "';";
@@ -69,19 +77,26 @@ std::vector<std::string>* Db::auth(std::string username, std::string pass)
 	int check = sqlite3_column_int(stmt, 0);
 	std::cout << "CHECK: " << check << std::endl;
 
+	result.push_back("1");
 	if (check == 0)
 	{
+		result.push_back("0");
 		return result;
 	}
 
-	result->push_back("1");
+	result.push_back("1");
+	sqlite3_finalize(stmt);
+	//sqlite3_close(db);
 
 	return result;
 }
 
-std::vector<std::string>* Db::registrate(std::string username, std::string pass)
+std::vector<std::string> Db::registrate(std::string username, std::string pass)
 {
-	std::vector<std::string>* result = new std::vector<std::string>;
+	//if (sqlite3_open("project_db.dblite", &db))
+	//	fprintf(stderr, "Error openning/creating DB: %s\n", sqlite3_errmsg(db));
+
+	std::vector<std::string> result;
 
 	if (is_exist(username) > 0)
 	{
@@ -95,19 +110,24 @@ std::vector<std::string>* Db::registrate(std::string username, std::string pass)
 	std::string query = "INSERT INTO User(username, password) VALUES('" + username + "', '" + pass + "');";
 
 	int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, &err);
+	result.push_back("0");
 	if (rc != SQLITE_OK)
 	{
 		fprintf(stderr, "Error SQL: %sn", err);
 		sqlite3_free(err);
+		result.push_back("0");
 		return result;
 	}
 
-	result->push_back("1");
+	result.push_back("1");
 	return result;
 }
 
 int Db::get_id(std::string username)
 {
+	//if (sqlite3_open("project_db.dblite", &db))
+	//	fprintf(stderr, "Error openning/creating DB: %s\n", sqlite3_errmsg(db));
+
 	if (is_exist(username) == 0)
 	{
 		return -1;
@@ -115,31 +135,39 @@ int Db::get_id(std::string username)
 
 	sqlite3_stmt* stmt;
 	std::string query = "SELECT user_id FROM User WHERE username='" + username + "';";
-	std::cout << query << std::endl;
+	/*std::cout << query << std::endl;*/
 
 	sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, 0);
 	sqlite3_step(stmt);
 
-	return sqlite3_column_int(stmt, 0);
+	int id = sqlite3_column_int(stmt, 0);
+	sqlite3_finalize(stmt);
+	 
+	return id;
 }
 
-std::vector<std::string>* Db::add_message(std::string username, std::vector<std::string> users, std::string msg_text)
+std::vector<std::string> Db::add_message(std::string username, std::vector<std::string> users, std::string msg_text)
 {
-	std::vector<std::string>* result = new std::vector<std::string>;
+	//if (sqlite3_open("project_db.dblite", &db))
+	//	fprintf(stderr, "Error openning/creating DB: %s\n", sqlite3_errmsg(db));
+
+	std::vector<std::string> result;
 
 	char* err;
 	int id = get_id(username);
 
-	std::cout << "FROM ID: " << id << std::endl;
-
+	std::cout << "\nFROM ID: " << username << std::endl;
+	std::cout << "\nTO ID: " << users.at(0) << std::endl;
+	result.push_back("5");
 	if (id == -1)
 	{
+		result.push_back("0");
 		return result;
 	}
 
 	for (int i = 0; i < users.size(); i++)
 	{
-		std::cout << "FROM USER: " << users.at(i) << std::endl;
+		std::cout << "FROM USER: " << id << std::endl;
 		int to_id = get_id(users.at(i));
 		std::cout << "TO ID: " << to_id << std::endl;
 
@@ -150,40 +178,48 @@ std::vector<std::string>* Db::add_message(std::string username, std::vector<std:
 		}
 
 		std::string query = "INSERT INTO Messages(from_id, to_id, msg_text) VALUES(" + std::to_string(id)+ ", " + std::to_string(to_id) + ", '" + msg_text + "');";
+		std::cout << query << std::endl;
 		int rc = sqlite3_exec(db, query.c_str(), NULL, NULL, &err);
 
 		if (rc != SQLITE_OK)
 		{
 			fprintf(stderr, "Error SQL: %sn", err);
 			sqlite3_free(err);
+			result.push_back("0");
 			return result;
 		}
 
 	}
 	users.clear();
-
-	result->push_back("1");
+	result.push_back("1");
+	//sqlite3_close_v2(db);
+	//sqlite3_close(db);
 
 	return result;
 }
 
-std::vector<std::string>* Db::get_messages_from_user(std::string username, std::string user_from)
+std::vector<std::string> Db::get_messages_from_user(std::string username, std::string user_from)
 {
-	std::vector<std::string>* messages = new std::vector<std::string>;
+	//if (sqlite3_open("project_db.dblite", &db))
+	//	fprintf(stderr, "Error openning/creating DB: %s\n", sqlite3_errmsg(db));
+
+	std::vector<std::string> messages;
 
 	int user_id = is_exist(username);
-
-	if (user_id == 0)
+	messages.push_back("4");
+	if (user_id <= 0)
 	{
 		std::cout << "USER DOES NOT EXISTS\n";
+		messages.push_back("0");
 		return messages;
 	}
 
 	int user_from_id = is_exist(user_from);
 
-	if (user_from_id > 0)
+	if (user_from_id == 0)
 	{
-		std::cout << "USER FROM ALREADY EXISTS\n";
+		std::cout << "USER DOES NOT EXISTS\n";
+		messages.push_back("0");
 		return messages;
 	}
 
@@ -196,26 +232,30 @@ std::vector<std::string>* Db::get_messages_from_user(std::string username, std::
 	{
 		const unsigned char* msg = sqlite3_column_text(stmt, 0);
 		std::string result = std::string(reinterpret_cast<const char*>(msg));
-		messages->push_back(result);
+		messages.push_back(result);
 	}
-	
+	sqlite3_finalize(stmt);
 	return messages;
 }
 
-std::vector<std::string>* Db::message_count(std::string username)
+std::vector<std::string> Db::message_count(std::string username)
 {
-	std::vector<std::string>* result = new std::vector<std::string>;
+	//if (sqlite3_open("project_db.dblite", &db))
+	//	fprintf(stderr, "Error openning/creating DB: %s\n", sqlite3_errmsg(db));
+
+	std::vector<std::string> result;
 
 	int user_id = is_exist(username);
-
-	if (user_id == 0)
+	result.push_back("3");
+	if (user_id <= 0)
 	{
 		std::cout << "USER DOES NOT EXISTS\n";
+		result.push_back("0");
 		return result;
 	}
 
 	sqlite3_stmt* stmt;
-	std::string sql = "SELECT t2.username, count(*) as mes_count FROM Messages as t1 inner join Users as t2 on t1.from_id = t2.user_id WHERE to_id = '" + std::to_string(user_id) + "' GROUP BY from_id;";
+	std::string sql = "SELECT t2.username, count(*) as mes_count FROM Messages as t1 inner join User as t2 on t1.from_id = t2.user_id WHERE to_id = '" + std::to_string(user_id) + "' GROUP BY from_id;";
 	sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, 0);
 
 	while (sqlite3_step(stmt) != SQLITE_DONE)
@@ -223,8 +263,9 @@ std::vector<std::string>* Db::message_count(std::string username)
 		const unsigned char* msg = sqlite3_column_text(stmt, 0);
 		int count = sqlite3_column_int(stmt, 1);
 		std::string res = std::string(reinterpret_cast<const char*>(msg)) + ": " + std::to_string(count);
-		result->push_back(res);
+		std::cout << "\n--RES--\n" << res << "\n--RES--\n" << std::endl;
+		result.push_back(res);
 	}
-
+	sqlite3_finalize(stmt);
 	return result;
 }
