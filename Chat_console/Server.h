@@ -16,6 +16,8 @@ public:
 	Server();
 	//~Server();
 
+	std::vector<std::string> users_online;
+
 	void init();
 	void socket_init(int& argc, char** argv);
 	void close_listen();
@@ -24,12 +26,10 @@ public:
 	void shutdown_connection();
 	void clean();
 	void set_online(std::string username);
-
+	std::vector<std::string> get_users() { return users_online; };
 private:
 	WSADATA ws;
 	SOCKET sock_listen;
 	SOCKET sock_client;
 	addrinfo addr, *result;
-	
-	std::vector<std::string> users_online;
 };

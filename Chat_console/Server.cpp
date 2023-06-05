@@ -115,10 +115,8 @@ void Server::recv_request()
 		{
 			Protocol prot(request);
 			std::string response = prot.response(users_online);
-			std::cout << "\n---SEND_RESP---\n" << response << "\n---SEND_RESP---\n";
 			send_response(response);
 			std::cout << "Recieved: " << res << " bytes" << std::endl;
-			std::cout << "REQUEST: " << response.c_str() << std::endl;
 		}
 		else if (res == 0)
 			printf("Connection closing...\n");

@@ -33,10 +33,17 @@ std::vector<std::string> Protocol::registration(std::vector<std::string> entitie
 	Db db;
 	return db.registrate(entities.at(0), entities.at(1));
 }
-std::vector<std::string> Protocol::auth(std::vector<std::string> entities)
+std::vector<std::string> Protocol::auth(std::vector<std::string> entities, std::vector<std::string> &users_online)
 {
 	Db db;
-	return db.auth(entities.at(0), entities.at(1));
+	std::vector<std::string> result = db.auth(entities.at(0), entities.at(1));
+
+	if (result.at(1) == "1")
+	{
+		users_online.push_back(entities.at(0));
+	}
+
+	return result;
 }
 //std::vector<std::string*> Protocol::user_list(std::vector<std::string> entities)
 //{
@@ -45,13 +52,6 @@ std::vector<std::string> Protocol::auth(std::vector<std::string> entities)
 //}
 std::vector<std::string> Protocol::send_message(std::vector<std::string> entities)
 {
-	std::cout << "\n---ENTITIES---\n";
-	for (int i = 0; i < entities.size(); i++)
-	{
-		std::cout << "Entity " << i << ": " << entities.at(i) << std::endl;
-	}
-	std::cout << "---ENTITIES---\n";
-
 	Db db;
 	std::vector<std::string> users;
 
@@ -64,30 +64,17 @@ std::vector<std::string> Protocol::send_message(std::vector<std::string> entitie
 }
 std::vector<std::string> Protocol::get_user_msg(std::vector<std::string> entities)
 {
-	std::cout << "\n---ENTITIES---\n";
-	for (int i = 0; i < entities.size(); i++)
-	{
-		std::cout << "Entity " << i << ": " << entities.at(i) << std::endl;
-	}
-	std::cout << "---ENTITIES---\n";
-
 	Db db;
 	return db.get_messages_from_user(entities.at(0), entities.at(1));
 }
 
 std::vector<std::string> Protocol::message_count(std::vector<std::string> entities)
 {
-	std::cout << "\n---ENTITIES---\n";
-	for (int i = 0; i < entities.size(); i++)
-	{
-		std::cout << "Entity " << i << ": " << entities.at(i) << std::endl;
-	}
-	std::cout << "---ENTITIES---\n";
 	Db db;
 	return db.message_count(entities.at(0));
 }
 
-std::string Protocol::response(std::vector<std::string> users)
+std::string Protocol::response(std::vector<std::string>& users_online)
 {
 	std::vector<std::string> result;
 
@@ -97,13 +84,13 @@ std::string Protocol::response(std::vector<std::string> users)
 		result = registration(request.entities);
 		break;
 	case Operations::AUTH:
-		result = auth(request.entities);
+		result = auth(request.entities, users_online);
 		break;
 	case Operations::MESSAGE_LIST:
 		result = message_count(request.entities);
 		break;
 	case Operations::USER_LIST:
-		result = users;
+		result = users_online;
 		break;
 	case Operations::USER_MESSAGE:
 		result = get_user_msg(request.entities);
