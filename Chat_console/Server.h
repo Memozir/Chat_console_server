@@ -14,7 +14,6 @@ class Server
 public:
 
 	Server();
-	//~Server();
 
 	std::vector<std::string> users_online;
 

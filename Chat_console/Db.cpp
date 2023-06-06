@@ -81,6 +81,7 @@ std::vector<std::string> Db::auth(std::string username, std::string pass)
 	if (check == 0)
 	{
 		result.push_back("0");
+		sqlite3_finalize(stmt);
 		return result;
 	}
 
@@ -95,6 +96,9 @@ std::vector<std::string> Db::registrate(std::string username, std::string pass)
 {
 	//if (sqlite3_open("project_db.dblite", &db))
 	//	fprintf(stderr, "Error openning/creating DB: %s\n", sqlite3_errmsg(db));
+
+	std::cout << "PASS: " << pass << std::endl;
+	std::cout << "NAME: " << username << std::endl;
 
 	std::vector<std::string> result;
 

@@ -113,8 +113,12 @@ void Server::recv_request()
 
 		if (res > 0)
 		{
+			std::cout << "\nCHECK: " << request.c_str() << std::endl;
+			//std::string new_request = request;
+
 			Protocol prot(request);
 			std::string response = prot.response(users_online);
+
 			send_response(response);
 			std::cout << "Recieved: " << res << " bytes" << std::endl;
 		}

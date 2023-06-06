@@ -45,7 +45,6 @@ void RequestParser::print_parsed()
 
 RequestParser::Request RequestParser::parse()
 {
-
 	//int request_len = this->request.size();
 	//int request_len = get_str_size(this->request);
 	std::string buf;
